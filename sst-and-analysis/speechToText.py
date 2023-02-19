@@ -19,11 +19,12 @@ cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 240)
 
                     
 webcamcontroller = webcamController()
-webcam = threading.Thread(target=webcamcontroller.start, args=(cap,))
-                
+webcam = threading.Thread(target=webcamcontroller.run, args=(cap,))
+webcam.start()
+
 if __name__ == "__main__":
     while True:
-        data = stream.read(4096)
+        data = stream.read(4096, exception_on_overflow=False)
             
         if recognizer.AcceptWaveform(data):
             text = recognizer.Result()
@@ -32,6 +33,6 @@ if __name__ == "__main__":
                 print(text)
                 print(getScore(text))
                 if (getScore(text) > 3):
-                    webcam.start()
+                    webcamcontroller.start()
                 elif webcam.is_alive():
-                    webcam.stop(cap)
+                    webcamcontroller.stop()

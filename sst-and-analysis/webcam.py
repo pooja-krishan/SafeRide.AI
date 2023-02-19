@@ -1,22 +1,24 @@
 import cv2
-
+import threading
 
 class webcamController:
 
     def __init__(self) -> None:
+        self.streaming = False
+
+    def stop(self):
+        self.streaming = False
+        cv2.destroyAllWindows()
+        
+    def start(self):
         self.streaming = True
 
-    def stop(self, cap):
-        cap.release()
-        cv2.destroyAllWindows()
-        quit()
-
-    def start(self, cap):
-        while self.streaming:
-            try:
-                while True:
+    def run(self, cap):
+        while True:
+            while self.streaming:
+                try:
+                    
                     ret, frame = cap.read()
-                    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
                     cv2.imshow("Dashcam Footage", frame)
 
@@ -24,11 +26,8 @@ class webcamController:
                     if exitKey == 27:
                         break
 
-                self.stop(cap)
-
-            except cv2.error as e:
-                print(str(e))
-
+                except cv2.error as e:
+                    print(str(e))
 
 
 
