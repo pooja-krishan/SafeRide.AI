@@ -1,0 +1,58 @@
+:root {
+    --red-flag: #EC5C5C;
+}
+
+.content{
+    width:100%;
+    margin-top:5%;
+}
+
+.header{
+    width:60%;
+    margin:0 20% 0 20%;
+    font-family: 'Poppins', sans-serif;  
+}
+.transcript{
+    width:60%;
+    margin:1% 20% 0 20%;
+    font-family: 'Poppins', sans-serif;  
+}
+.video{
+    width: 50%;
+    margin:2% 30% 0 20%; 
+}
+
+#vidstream{
+    width: 100%;
+    border-radius: 5px;
+
+}
+
+.header h1{
+    font-weight:700;
+    margin: 0;
+    font-size:  60px;
+}
+.header h4{
+    font-family: 'Poppins', sans-serif; 
+    font-size:25px;
+    color:#C8C8C8; 
+}
+
+.header span{
+    color: var(--red-flag);
+}
+
+.transcript h1{
+    font-weight:700;
+    margin: 0;
+    font-size:  50px; 
+}
+
+.transcript p{
+    font-family: 'Poppins', sans-serif; 
+    font-size:25px;
+    color:#C8C8C8; 
+    margin: 10px 0 10px 0;
+    font-weight:800;
+}
