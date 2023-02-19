@@ -1,13 +1,16 @@
 from vosk import Model, KaldiRecognizer
 import pyaudio
 from utils.sentimentAnalysis import getPerspectiveScore, getGPTScore
+from utils.textMessage import sendEmergencySMS
 from utils.webcam import webcamController
 import threading
 from flask import Flask, jsonify, Response
+from flask_cors import CORS, cross_origin
 
 
 model = Model(model_name = "vosk-model-small-en-us-0.15")
 
+text_sent = False
 score_history = [0, 0, 0]   # tracks last 5 responses
 response_history = ['', '', '']
 
@@ -23,11 +26,15 @@ webcam_thread.start()
 
 
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
+
 
 def runWebServer():
-    app.run()
+    app.run(host="0.0.0.0")
 
 def speechMonitoring():
+    global text_sent
     while True:
         data = stream.read(4096, exception_on_overflow=False)
         if recognizer.AcceptWaveform(data):
@@ -44,12 +51,16 @@ def speechMonitoring():
                 print(average_score)
                 if (average_score > 0.5 and webcamcontroller.streaming == False):
                     print("***************\nSTARTING WEBCAM\n***************")
+                    if not text_sent: 
+                        sendEmergencySMS()
+                        text_sent = True
                     webcamcontroller.streaming = True
                 elif (average_score < 0.25 and webcamcontroller.streaming == True):
-                    print("***************\STOPPING WEBCAM\n***************")
+                    print("***************\nSTOPPING WEBCAM\n***************")
                     webcamcontroller.streaming = False
 
 @app.route('/')
+@cross_origin()
 def sendStreamStatus():
     if webcamcontroller.streaming:
         return '<h1>streaming</h1>'
@@ -57,6 +68,7 @@ def sendStreamStatus():
         return '<h1>not streaming</h1>'
 
 @app.route('/transcript')
+@cross_origin()
 def sendTranscript():
     return jsonify({
         response_history[0]: score_history[0],
