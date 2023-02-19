@@ -1,0 +1,15 @@
+.navbar{
+    width:100%; 
+    border-bottom: solid;
+    font-family: 'Quicksand', sans-serif;   
+}
+.logo{
+    padding: 10px 0 10px 0;
+    font-size:20px;
+    display: flex;
+    justify-content: center;
+}
+
+#logoHead{
+    margin:0;
+}

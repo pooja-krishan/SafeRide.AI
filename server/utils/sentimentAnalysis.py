@@ -1,6 +1,6 @@
 from googleapiclient import discovery
-import openai
 import os
+import openai
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -10,7 +10,6 @@ auth_token = os.getenv('TWILIO_AUTH_TOKEN')
 
 openai.api_key = os.getenv('OPEN_AI_API_KEY')
 GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY')
-
 
 google_client = discovery.build(
   "commentanalyzer",
