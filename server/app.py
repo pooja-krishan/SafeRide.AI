@@ -39,11 +39,13 @@ def speechMonitoring():
                 response_history.append(text)
                 score_history.pop(0)
                 score_history.append(getPerspectiveScore(text))
-                print(score_history)
-                if (sum(score_history)/len(score_history) > 0.5 and webcamcontroller.streaming == False):
+                # score_history.append(getGPTScore(text))
+                average_score = sum(score_history)/len(score_history)
+                print(average_score)
+                if (average_score > 0.5 and webcamcontroller.streaming == False):
                     print("***************\nSTARTING WEBCAM\n***************")
                     webcamcontroller.streaming = True
-                elif (webcamcontroller.streaming == True):
+                elif (average_score < 0.25 and webcamcontroller.streaming == True):
                     print("***************\STOPPING WEBCAM\n***************")
                     webcamcontroller.streaming = False
 
@@ -57,9 +59,9 @@ def sendStreamStatus():
 @app.route('/transcript')
 def sendTranscript():
     return jsonify({
-        '0': response_history[0],
-        '1': response_history[1],
-        '2': response_history[2]
+        response_history[0]: score_history[0],
+        response_history[1]: score_history[1],
+        response_history[2]: score_history[2]
     })
 
 

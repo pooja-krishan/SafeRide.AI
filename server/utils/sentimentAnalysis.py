@@ -1,7 +1,7 @@
 from googleapiclient import discovery
 import openai
 
-openai.api_key = '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'
+openai.api_key = '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'
 GOOGLE_API_KEY = 'AIzaSyA6PYGpdbLZuRozjaNpHTnZ60izcCWrO5U'
 
 google_client = discovery.build(
@@ -33,7 +33,7 @@ def getGPTScore(text):
   completions = openai.Completion.create(
       engine='text-davinci-003',
       temperature=0, 
-      prompt=f'Imagine you are the greatest sentiment analyzer ever. Decide how hostile a sentence is from a scale of 0.0 to 1.0.\nContext: This is a conversation between a rideshare driver and passanger. The expected tone is professional and friendly. Keep this in mind while giving your answer.\n\nExample:\nText: "You suck at driving"\nRating: 0.7941\n\nText: \"{text}\"\nRating:',
+      prompt=f'Imagine you are tasked with being the greatest sentiment analyzer ever. You are given the ability to analyze text in more depth than anything before you. Decide how hostile and threatening a comment is from a scale of 0.0 to 1.0.\nContext: This is a conversation between a rideshare driver and passanger. The expected tone is professional. Keep this in mind while giving your answer.\n\nExamples:\nText: \"You suck at driving\"\nRating: 0.7314\n\nText: \"You are so good at driving\"\nRating: 0.1343\n\nText: \"Are you stupid?\"\nRating: 0.8648\n\nText:\"{text}\"\nRating:',
       max_tokens = 3,
       n=1
   )
