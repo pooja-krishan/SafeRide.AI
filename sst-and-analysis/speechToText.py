@@ -1,11 +1,13 @@
 from vosk import Model, KaldiRecognizer
 import pyaudio
-from sentimentAnalysis import getScore
+from sentimentAnalysis import getPerspectiveScore, getGPTScore
 from webcam import webcamController
 import threading
 import cv2
-    
+
 model = Model(model_name = "vosk-model-small-en-us-0.15")
+
+response_history = [0, 0, 0, 0, 0]   # tracks last 5 responses
 
 recognizer = KaldiRecognizer(model, 16000)
 
@@ -31,8 +33,10 @@ if __name__ == "__main__":
             text = text[14:-3]
             if text != '':
                 print(text)
-                print(getScore(text))
-                if (getScore(text) > 3):
+                response_history.pop(0)
+                response_history.append(getGPTScore(text))
+                print(response_history)
+                if (sum(response_history)/len(response_history) > 0.5):
                     webcamcontroller.start()
                 elif webcam.is_alive():
                     webcamcontroller.stop()
