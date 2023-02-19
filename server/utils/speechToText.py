@@ -24,19 +24,22 @@ webcamcontroller = webcamController()
 webcam = threading.Thread(target=webcamcontroller.run, args=(cap,))
 webcam.start()
 
-if __name__ == "__main__":
-    while True:
-        data = stream.read(4096, exception_on_overflow=False)
+
+def getStreamStatus():
+    return webcamcontroller.streaming
+
+while True:
+    data = stream.read(4096, exception_on_overflow=False)
             
-        if recognizer.AcceptWaveform(data):
-            text = recognizer.Result()
-            text = text[14:-3]
-            if text != '':
-                print(text)
-                response_history.pop(0)
-                response_history.append(getGPTScore(text))
-                print(response_history)
-                if (sum(response_history)/len(response_history) > 0.5):
-                    webcamcontroller.start()
-                elif webcam.is_alive():
-                    webcamcontroller.stop()
+    if recognizer.AcceptWaveform(data):
+        text = recognizer.Result()
+        text = text[14:-3]
+        if text != '':
+            print(text)
+            response_history.pop(0)
+            response_history.append(getGPTScore(text))
+            print(response_history)
+            if (sum(response_history)/len(response_history) > 0.5):
+                webcamcontroller.start()
+            elif webcam.is_alive():
+                webcamcontroller.stop()
